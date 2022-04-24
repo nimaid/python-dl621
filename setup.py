@@ -13,7 +13,7 @@ with open('LICENSE') as f:
     
 setup(
     name='dl621',
-    version='0.1.2',
+    version='0.1.2.1',
     description='A simple library to download e621 images with embedded tags',
     long_description=readme,
     author='Ella Jameson',
