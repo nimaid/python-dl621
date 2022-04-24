@@ -14,7 +14,7 @@ with open('LICENSE') as f:
 setup(
     name='e621dl',
     version='0.1.0',
-    description="A simple library to download e621 images with embedded tags',
+    description='A simple library to download e621 images with embedded tags',
     long_description=readme,
     author='Ella Jameson',
     author_email='ellagjameson@gmail.com',
