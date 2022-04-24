@@ -1,1 +1,1 @@
-imgtag>=1.1
+imgtag>=0.1.1

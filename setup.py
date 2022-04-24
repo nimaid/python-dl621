@@ -11,6 +11,9 @@ with open('README.rst') as f:
 with open('LICENSE') as f:
     license = f.read()
 
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+    
 setup(
     name='e621dl',
     version='0.1.0',
@@ -20,6 +23,7 @@ setup(
     author_email='ellagjameson@gmail.com',
     url='https://github.com/nimaid/python-e621dl',
     license=license,
+    install_requires=required,
     packages=find_packages(exclude=('tests', 'docs')),
     entry_points={
         'console_scripts': [
