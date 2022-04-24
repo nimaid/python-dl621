@@ -1,10 +1,5 @@
-Sample Module Repository
+e621-dl
 ========================
 
-This simple project is an example repo for Python projects.
+A simple library to download e621 images with tags
 
-`Learn more <http://www.kennethreitz.org/essays/repository-structure-and-python>`_.
-
----------------
-
-If you want to learn more about ``setup.py`` files, check out `this repository <https://github.com/kennethreitz/setup.py>`_.
