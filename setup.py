@@ -13,7 +13,7 @@ with open('LICENSE') as f:
     
 setup(
     name='dl621',
-    version='0.1.2.1',
+    version='0.1.3.1',
     description='A simple library to download e621 images with embedded tags',
     long_description=readme,
     author='Ella Jameson',
@@ -24,7 +24,7 @@ setup(
     packages=find_packages(exclude=('tests', 'docs')),
     entry_points={
         'console_scripts': [
-            'e621-dl = dl621.core:run',
+            'dl621=dl621.core:run',
         ]
     }
 )

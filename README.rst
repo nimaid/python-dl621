@@ -13,9 +13,24 @@ Installation
 Usage
 ========================
 
-The program can be used as a simple command line program:
+The program can be used as a simple command line program::
 
-``e621-dl MY_POST_ID``
+	$ e621-dl -h
+	usage: e621-dl [-h] -i ID [-f FOLDER] [-p PREFIX] [-n] [-u USERAGENT]
+
+	Downloads e621 images with tags
+
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -i ID, --post_id ID   the ID of the e621 post
+	  -f FOLDER, --dl_folder FOLDER
+							the folder to download to
+	  -p PREFIX, --name_prefix PREFIX
+							this string will go at the beginning of filenames
+	  -n, --no_tags         don't save tags or metadata
+	  -u USERAGENT, --user_agent USERAGENT
+							manual override of the user agent string
+
 
 It can also be imported and used in your own scripts::
 
