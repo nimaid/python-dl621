@@ -12,13 +12,13 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='sample',
+    name='e621-dl',
     version='0.1.0',
-    description='Sample package for Python-Guide.org',
+    description="A simple library to download e621 images with embedded tags',
     long_description=readme,
-    author='Kenneth Reitz',
-    author_email='me@kennethreitz.com',
-    url='https://github.com/kennethreitz/samplemod',
+    author='Ella Jameson',
+    author_email='ellagjameson@gmail.com',
+    url='https://github.com/nimaid/python-e621-dl',
     license=license,
     packages=find_packages(exclude=('tests', 'docs'))
 )
