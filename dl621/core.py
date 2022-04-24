@@ -103,19 +103,29 @@ def download_image(post_id, output_folder=".", name_prefix=None, add_tags=True, 
     print("    Done downloading! Location: {}".format(image_path))
     return image_path
 
-    
+
+
+def dir_path(string):
+    if os.path.isdir(string):
+        return string
+    else:
+        raise NotADirectoryError(string)
     
 def parse_args(args):
     parser = argparse.ArgumentParser(description="Downloads e621 images with tags")
     
-    parser.add_argument(dest="post_id", help="the ID of the e621 post", type=int, metavar="e621_id")
+    parser.add_argument("-i", "--post_id", dest="post_id", help="the ID of the e621 post", type=int, required=True, metavar="ID")
+    parser.add_argument("-f", "--dl_folder", dest="dl_folder", help="the folder to download to", type=dir_path, default=".", metavar="FOLDER")
+    parser.add_argument("-p", "--name_prefix", dest="name_prefix", help="this string will go at the beginning of filenames", type=str, default=None, metavar="PREFIX")
+    parser.add_argument("-n", "--no_tags", dest="add_tags", help="don't save tags or metadata", action='store_false')
+    parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
     
     return parser.parse_args(args)
 
 def main(args):
     args = parse_args(args)
     
-    download_image(args.post_id)
+    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_prefix=args.name_prefix, add_tags=args.add_tags, user_agent=args.user_agent)
 
 def run():
     main(sys.argv[1:])
