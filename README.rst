@@ -15,8 +15,8 @@ Usage
 
 The program can be used as a simple command line program::
 
-	$ e621-dl -h
-	usage: e621-dl [-h] -i ID [-f FOLDER] [-p PREFIX] [-n] [-u USERAGENT]
+	$ dl621 -h
+	usage: dl621 [-h] -i ID [-f FOLDER] [-p PREFIX] [-n] [-u USERAGENT]
 
 	Downloads e621 images with tags
 
