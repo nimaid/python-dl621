@@ -15,19 +15,19 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
     
 setup(
-    name='e621dl',
+    name='dl621',
     version='0.1.0',
     description='A simple library to download e621 images with embedded tags',
     long_description=readme,
     author='Ella Jameson',
     author_email='ellagjameson@gmail.com',
-    url='https://github.com/nimaid/python-e621dl',
+    url='https://github.com/nimaid/python-dl621',
     license=license,
     install_requires=required,
     packages=find_packages(exclude=('tests', 'docs')),
     entry_points={
         'console_scripts': [
-            'e621dl = e621dl.core:run',
+            'e621-dl = dl621.core:run',
         ]
     }
 )

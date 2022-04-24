@@ -6,7 +6,7 @@ import urllib.request
 import os
 import imgtag
 
-__default_user_agent__ = "e621dl/1.0 (by nimaid on e621)"
+__default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
 
 def get_info_json(post_id, user_agent=__default_user_agent__):
     if type(post_id) != int:
