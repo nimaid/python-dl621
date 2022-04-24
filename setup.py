@@ -16,7 +16,7 @@ with open('requirements.txt') as f:
     
 setup(
     name='dl621',
-    version='0.1.0',
+    version='0.1.1',
     description='A simple library to download e621 images with embedded tags',
     long_description=readme,
     author='Ella Jameson',
