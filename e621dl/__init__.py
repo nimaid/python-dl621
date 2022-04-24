@@ -1,1 +1,1 @@
-from .e621dl import download_image
+from .core import download_image

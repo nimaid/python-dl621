@@ -20,6 +20,11 @@ setup(
     author_email='ellagjameson@gmail.com',
     url='https://github.com/nimaid/python-e621dl',
     license=license,
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests', 'docs')),
+    entry_points={
+        'console_scripts': [
+            'e621dl = e621dl.core:run',
+        ]
+    }
 )
 
