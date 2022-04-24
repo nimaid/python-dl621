@@ -53,6 +53,10 @@ def get_tags_from_json(info_json):
     tags_out.append("post_site: e621.net")
     tags_out.append("post_id: {}".format(post_id))
     
+    # MD5 tag
+    md5_sum = info_json["file"]["md5"]
+    tags_out.append("md5: {}".format(md5_sum))
+    
     # Sources tags
     sources = info_json["sources"]
     for source in sources:
@@ -77,8 +81,7 @@ def download_image(post_id, output_folder=".", name_prefix=None, add_tags=True, 
     
     # Download image
     print("    Downloading image...")
-    image_ext = image_url.split("/")[-1].split(".")[-1].lower()
-    image_name = "e621_{}.{}".format(post_id, image_ext)
+    image_name = "e621_{}.{}".format(post_id, image_info["file"]["ext"])
     if name_prefix != None:
         image_name = name_prefix + image_name
     
