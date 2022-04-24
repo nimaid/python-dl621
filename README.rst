@@ -1,5 +1,5 @@
-e621-dl
+e621dl
 ========================
 
-A simple library to download e621 images with tags
+A simple python module to download e621 images with embedded tags and description
 
