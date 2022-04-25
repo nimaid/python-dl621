@@ -13,7 +13,7 @@ with open('LICENSE') as f:
     
 setup(
     name='dl621',
-    version='1.0.2',
+    version='1.0.3',
     description='A simple python module and CLI utility to download e621 images with embedded XMP tags and description',
     long_description=readme,
     author='Ella Jameson',

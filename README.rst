@@ -16,8 +16,8 @@ Usage
 The program can be used as a simple command line program::
 
     $ dl621 -h
-    usage: dl621 [-h] -i ID [-f FOLDER] [-p PREFIX] [-n] [-u USERAGENT]
-    
+    usage: dl621 [-h] -i ID [-f FOLDER] [-p NAME] [-n] [-u USERAGENT]
+
     Downloads e621 images with embedded XMP tags and description
 
     optional arguments:
