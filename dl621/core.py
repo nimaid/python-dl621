@@ -7,6 +7,7 @@ import os
 import imgtag
 
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
+__default_name_pattern__ = "dl621_{m}"
 
 def get_info_json(post_id, user_agent=__default_user_agent__):
     if type(post_id) != int:
@@ -63,8 +64,9 @@ def get_tags_from_json(info_json):
         tags_out.append("source: {}".format(source))
     
     return tags_out
+    
 
-def download_image(post_id, output_folder=".", name_prefix=None, add_tags=True, user_agent=__default_user_agent__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, user_agent=__default_user_agent__):
     # Get information from e621 API
     print("[{}] Getting info for e621 post...".format(post_id))
     image_info = get_info_json(post_id, user_agent=user_agent)
@@ -81,9 +83,7 @@ def download_image(post_id, output_folder=".", name_prefix=None, add_tags=True, 
     
     # Download image
     print("    Downloading image...")
-    image_name = "e621_{}.{}".format(post_id, image_info["file"]["ext"])
-    if name_prefix != None:
-        image_name = name_prefix + image_name
+    image_name = name_pattern.format(m = image_info["file"]["md5"], i = post_id) + "." + image_info["file"]["ext"]
     
     image_path = os.path.join(output_folder, image_name)
     
@@ -115,11 +115,11 @@ def dir_path(string):
         raise NotADirectoryError(string)
     
 def parse_args(args):
-    parser = argparse.ArgumentParser(description="Downloads e621 images with tags")
+    parser = argparse.ArgumentParser(description="Downloads e621 images with embedded XMP tags and description")
     
     parser.add_argument("-i", "--post_id", dest="post_id", help="the ID of the e621 post", type=int, required=True, metavar="ID")
     parser.add_argument("-f", "--dl_folder", dest="dl_folder", help="the folder to download to", type=dir_path, default=".", metavar="FOLDER")
-    parser.add_argument("-p", "--name_prefix", dest="name_prefix", help="this string will go at the beginning of filenames", type=str, default=None, metavar="PREFIX")
+    parser.add_argument("-p", "--name_pattern", dest="name_pattern", help="the file name, Replacements: {m}=md5, {i}=post_id ", type=str, default=__default_name_pattern__, metavar="NAME")
     parser.add_argument("-n", "--no_tags", dest="add_tags", help="don't save tags or metadata", action='store_false')
     parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
     
@@ -128,7 +128,7 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
     
-    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_prefix=args.name_prefix, add_tags=args.add_tags, user_agent=args.user_agent)
+    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, user_agent=args.user_agent)
 
 def run():
     main(sys.argv[1:])
