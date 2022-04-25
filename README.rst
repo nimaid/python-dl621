@@ -33,11 +33,11 @@ The program can be used as a simple command line program::
 
 
 
-It can also be imported and used in your own scripts::
+It can also be imported and used in your own scripts (default options shown)::
 
     import dl621
 
-    r = dl621.download_image(post_id, output_folder=".", name_pattern="dl621_{m}", add_tags=True, user_agent="dl621/1.0 (by nimaid on e621)")
+    r = dl621.download_image(post_id, output_folder=".", name_pattern="dl621_{m}", add_tags=True, messages=True, user_agent="dl621/1.0 (by nimaid on e621)")
     if r != None:
         print("Image downloaded! Location:", r)
     else:

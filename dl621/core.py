@@ -70,24 +70,26 @@ def get_tags_from_json(info_json):
     
     return tags_out
     
-
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, user_agent=__default_user_agent__):
+def print_if_true(in_string, do_print):
+    if do_print:
+        print(in_string)
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, messages=True, user_agent=__default_user_agent__):
     # Get information from e621 API
-    print("[{}] Getting info for e621 post...".format(post_id))
+    print_if_true("[{}] Getting info for e621 post...".format(post_id), messages)
     image_info = get_info_json(post_id, user_agent=user_agent)
     if image_info == None:
-        print("    ERROR: No info returned.")
+        print_if_true("    ERROR: No info returned.", messages)
         return None
     if image_info["flags"]["deleted"]:
-        print("    ERROR: Image has been deleted.")
+        print_if_true("    ERROR: Image has been deleted.", messages)
         return None
     image_url = image_info["file"]["url"]
     if image_url == None:
-        print("    ERROR: Image has no download URL.")
+        print_if_true("    ERROR: Image has no download URL.", messages)
         return None
     
     # Download image
-    print("    Downloading image...")
+    print_if_true("    Downloading image...", messages)
     image_name = name_pattern.format(m = image_info["file"]["md5"], i = post_id) + "." + image_info["file"]["ext"]
     
     image_path = os.path.join(output_folder, image_name)
@@ -96,7 +98,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     
     # Tag image
     if add_tags:
-        print("    Embedding tags...")
+        print_if_true("    Embedding tags...", messages)
         image_tags = get_tags_from_json(image_info)
         
         image_tags_obj = imgtag.ImgTag(image_path)
@@ -108,7 +110,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
         image_tags_obj.add_tags(image_tags)
         image_tags_obj.close()
     
-    print("    Done downloading! Location: {}".format(image_path))
+    print_if_true("    Done downloading! Location: {}".format(image_path), messages)
     return image_path
 
 
@@ -133,7 +135,7 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
     
-    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, user_agent=args.user_agent)
+    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, messages=True, user_agent=args.user_agent)
 
 def run():
     main(sys.argv[1:])
