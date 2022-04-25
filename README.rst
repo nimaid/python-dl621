@@ -37,7 +37,7 @@ It can also be imported and used in your own scripts::
 
     import dl621
 
-    r = dl621.download_image(post_id, output_folder=".", name_prefix=None, add_tags=True, user_agent=__default_user_agent__)
+    r = dl621.download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, user_agent=__default_user_agent__)
     if r != None:
         print("Image downloaded! Location:", r)
     else:
