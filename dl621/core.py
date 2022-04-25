@@ -55,12 +55,17 @@ def get_tags_from_json(info_json):
     tags_out.append("post_id: {}".format(post_id))
     
     # MD5 tag
-    md5_sum = info_json["file"]["md5"]
-    tags_out.append("md5: {}".format(md5_sum))
+    tags_out.append("md5: {}".format(info_json["file"]["md5"]))
+    
+    # Rating tag
+    tags_out.append("rating: {}".format(info_json["rating"]))
+    
+    # Pool tags
+    for pool in info_json["pools"]:
+        tags_out.append("pool: {}".format(pool))
     
     # Sources tags
-    sources = info_json["sources"]
-    for source in sources:
+    for source in info_json["sources"]:
         tags_out.append("source: {}".format(source))
     
     return tags_out
