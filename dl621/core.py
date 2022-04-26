@@ -73,10 +73,16 @@ def get_tags_from_json(info_json):
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, messages=True, user_agent=__default_user_agent__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, messages=True, custom_json=None, user_agent=__default_user_agent__):
+    print_if_true("[{}] Downloading e621 post...".format(post_id), messages)
     # Get information from e621 API
-    print_if_true("[{}] Getting info for e621 post...".format(post_id), messages)
-    image_info = get_info_json(post_id, user_agent=user_agent)
+    if custom_json != None:
+        image_info = custom_json
+    else:
+        print_if_true("    Getting info for e621 post...".format(post_id), messages)
+        image_info = get_info_json(post_id, user_agent=user_agent)
+    
+    # Check to make sure it's valid
     if image_info == None:
         print_if_true("    ERROR: No info returned.", messages)
         return None
