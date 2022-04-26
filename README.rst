@@ -7,8 +7,19 @@ A simple python module and CLI utility to download e621 images with embedded XMP
 Installation
 ========================
 
+The module also requires Exempi, which is only available for Linux and Mac. Hence, this module only works on Linux and Mac.
+
+To easily install everything via conda:
+
+``conda env create -f environment.yml``
+
+To manually install just the module (still needs Exempi installed seperately):
+
 ``pip install dl621``
 
+To manually install Exempi on Debian:
+
+``sudo apt-get install -y exempi``
 
 Usage
 ========================
