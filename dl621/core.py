@@ -47,7 +47,7 @@ def get_info_json_multiple(page=None, page_modifier=None, limit=None, tags=None,
                 raise TypeError("The 'page_modifier' parameter must be a string")
             if page_modifier not in ["a", "b"]:
                 raise ValueError("The 'page_modifier' parameter must be either 'a' (after) or 'b' (before)")
-            url += "&page={}()".format(page_modifier, page)
+            url += "&page={}{}".format(page_modifier, page)
         else:
             url += "&page={}".format(page) 
     elif page != None:
@@ -59,6 +59,7 @@ def get_info_json_multiple(page=None, page_modifier=None, limit=None, tags=None,
         url += "&tags={}".format(tags)
     
     # Get the data
+    print(url)
     headers = {"User-Agent": user_agent}
     
     r = requests.get(url, headers=headers)
@@ -118,7 +119,6 @@ def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
 def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, messages=True, custom_json=None, user_agent=__default_user_agent__):
-    print_if_true("[{}] Downloading e621 post...".format(post_id), messages)
     # Get information from e621 API
     if custom_json != None:
         image_info = custom_json
