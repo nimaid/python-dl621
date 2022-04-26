@@ -7,7 +7,7 @@ A simple python module and CLI utility to download e621 images with embedded XMP
 Installation
 ========================
 
-The module also requires Exempi, which is only available for Linux and Mac. Hence, this module only works on Linux and Mac.
+The module requires Exempi, which is only available for Linux and Mac. Hence, this module only works on Linux and Mac.
 
 To easily install everything via conda:
 
@@ -27,7 +27,7 @@ Usage
 The program can be used as a simple command line program::
 
     $ dl621 -h
-    usage: dl621 [-h] -i ID [-f FOLDER] [-n NAME] [-t] [-u USERAGENT]
+    usage: dl621 [-h] -i ID [-f FOLDER] [-n NAME] [-t] [-a USERNAME:API_KEY] [-u USERAGENT]
 
     Downloads e621 images with embedded XMP tags and description
 
@@ -37,8 +37,10 @@ The program can be used as a simple command line program::
       -f FOLDER, --dl_folder FOLDER
                             the folder to download to
       -n NAME, --name_pattern NAME
-                            the file name, Replacements: {m}=md5, {i}=post_id
+                            the file name (no extention), Replacements: {m}=md5, {i}=post_id
       -t, --no_tags         don't save tags or metadata
+      -a USERNAME:API_KEY, --authorization USERNAME:API_KEY
+                            your e621 username and API key
       -u USERAGENT, --user_agent USERAGENT
                             manual override of the user agent string
 
@@ -48,7 +50,7 @@ It can also be imported and used in your own scripts (default options shown)::
 
     import dl621
 
-    r = dl621.download_image(post_id, output_folder=".", name_pattern="dl621_{m}", add_tags=True, messages=True, custom_json=None, user_agent="dl621/1.0 (by nimaid on e621)")
+    r = dl621.download_image(post_id, output_folder=".", name_pattern="dl621_{m}", add_tags=True, messages=True, custom_json=None, auth=None, user_agent="dl621/1.0 (by nimaid on e621)")
     if r != None:
         print("Image downloaded! Location:", r)
     else:
