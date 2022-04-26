@@ -59,7 +59,6 @@ def get_info_json_multiple(page=None, page_modifier=None, limit=None, tags=None,
         url += "&tags={}".format(tags)
     
     # Get the data
-    print(url)
     headers = {"User-Agent": user_agent}
     
     r = requests.get(url, headers=headers)
