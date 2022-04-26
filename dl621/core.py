@@ -6,6 +6,7 @@ import requests
 import urllib.request
 import os
 import imgtag
+import libxmp
 
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
 __default_name_pattern__ = "dl621_{m}"
@@ -168,21 +169,24 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     # Add image metadata
     if add_tags:
         print_if_true("    Embedding tags...", messages)
-        image_tags_obj = imgtag.ImgTag(image_path)
-        
-        # Set title
-        title = "{}{}/{}".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
-        image_tags_obj.set_title(title)
-        
-        # Set description
-        description = image_info["description"].strip()
-        if len(description) > 0:
-            image_tags_obj.set_description(description)
-        
-        # Set tags
-        image_tags = get_tags_from_json(image_info)
-        image_tags_obj.add_tags(image_tags)
-        image_tags_obj.close()
+        try:
+            image_tags_obj = imgtag.ImgTag(image_path)
+            
+            # Set title
+            title = "{}{}/{}".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
+            image_tags_obj.set_title(title)
+
+            # Set description
+            description = image_info["description"].strip()
+            if len(description) > 0:
+                image_tags_obj.set_description(description)
+
+            # Set tags
+            image_tags = get_tags_from_json(image_info)
+            image_tags_obj.add_tags(image_tags)
+            image_tags_obj.close()
+        except libxmp.XMPError:
+            warnings.warn("Could not save metadata in image!")
     
     print_if_true("    Done downloading! Location: {}".format(image_path), messages)
     return image_path
