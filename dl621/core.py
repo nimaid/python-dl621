@@ -132,8 +132,8 @@ def parse_args(args):
     
     parser.add_argument("-i", "--post_id", dest="post_id", help="the ID of the e621 post", type=int, required=True, metavar="ID")
     parser.add_argument("-f", "--dl_folder", dest="dl_folder", help="the folder to download to", type=dir_path, default=".", metavar="FOLDER")
-    parser.add_argument("-p", "--name_pattern", dest="name_pattern", help="the file name, Replacements: {m}=md5, {i}=post_id ", type=str, default=__default_name_pattern__, metavar="NAME")
-    parser.add_argument("-n", "--no_tags", dest="add_tags", help="don't save tags or metadata", action='store_false')
+    parser.add_argument("-n", "--name_pattern", dest="name_pattern", help="the file name, Replacements: {m}=md5, {i}=post_id ", type=str, default=__default_name_pattern__, metavar="NAME")
+    parser.add_argument("-t", "--no_tags", dest="add_tags", help="don't save tags or metadata", action='store_false')
     parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
     
     return parser.parse_args(args)
@@ -141,7 +141,7 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
     
-    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, messages=True, user_agent=args.user_agent)
+    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, user_agent=args.user_agent)
 
 def run():
     main(sys.argv[1:])
