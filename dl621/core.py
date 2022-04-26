@@ -13,7 +13,7 @@ __e621_base_url__ = "https://e621.net/"
 __e621_endpoint_posts__ = "posts"
 __e621_posts_per_request_limit__ = 320
 
-def get_info_json(post_id, user_agent=__default_user_agent__):
+def get_info_json(post_id, auth=None, user_agent=__default_user_agent__):
     if type(post_id) != int:
         raise TypeError("'post_id' must be an integer.")
     
@@ -21,14 +21,22 @@ def get_info_json(post_id, user_agent=__default_user_agent__):
     
     headers = {"User-Agent": user_agent}
     
-    r = requests.get(url, headers=headers)
+    if auth != None:
+        auth = auth.split(":")
+        if len(auth) != 2:
+            raise ValueError("'auth' argument must be a string in the form of 'username:api_key'")
+        
+        a = requests.auth.HTTPBasicAuth(auth[0], auth[1])
+        r = requests.get(url, headers=headers, auth=a)
+    else:
+        r = requests.get(url, headers=headers)
     
     if r.status_code != 200:
         return None
     
     return r.json()["post"]
 
-def get_info_json_multiple(page=None, page_modifier=None, limit=None, tags=None, user_agent=__default_user_agent__):
+def get_info_json_multiple(page=None, page_modifier=None, limit=None, tags=None, auth=None, user_agent=__default_user_agent__):
     # Build URL
     url = "{}{}.json".format(__e621_base_url__, __e621_endpoint_posts__)
     
@@ -61,7 +69,15 @@ def get_info_json_multiple(page=None, page_modifier=None, limit=None, tags=None,
     # Get the data
     headers = {"User-Agent": user_agent}
     
-    r = requests.get(url, headers=headers)
+    if auth != None:
+        auth = auth.split(":")
+        if len(auth) != 2:
+            raise ValueError("'auth' argument must be a string in the form of 'username:api_key'")
+        
+        a = requests.auth.HTTPBasicAuth(auth[0], auth[1])
+        r = requests.get(url, headers=headers, auth=a)
+    else:
+        r = requests.get(url, headers=headers)
     
     if r.status_code != 200:
         return None
@@ -117,13 +133,13 @@ def get_tags_from_json(info_json):
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, messages=True, custom_json=None, user_agent=__default_user_agent__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, messages=True, custom_json=None, auth=None, user_agent=__default_user_agent__):
     # Get information from e621 API
     if custom_json != None:
         image_info = custom_json
     else:
         print_if_true("    Getting info for e621 post...".format(post_id), messages)
-        image_info = get_info_json(post_id, user_agent=user_agent)
+        image_info = get_info_json(post_id, user_agent=user_agent, auth=auth)
     
     # Check to make sure it's valid
     if image_info == None:
@@ -134,7 +150,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
         return None
     image_url = image_info["file"]["url"]
     if image_url == None:
-        print_if_true("    ERROR: Image has no download URL.", messages)
+        print_if_true("    ERROR: Image has no download URL. You may need to use your API key or change your user settings.", messages)
         return None
     
     # Create destination folder if it doesn't already exist
@@ -184,8 +200,9 @@ def parse_args(args):
     
     parser.add_argument("-i", "--post_id", dest="post_id", help="the ID of the e621 post", type=int, required=True, metavar="ID")
     parser.add_argument("-f", "--dl_folder", dest="dl_folder", help="the folder to download to", type=dir_path, default=".", metavar="FOLDER")
-    parser.add_argument("-n", "--name_pattern", dest="name_pattern", help="the file name, Replacements: {m}=md5, {i}=post_id ", type=str, default=__default_name_pattern__, metavar="NAME")
+    parser.add_argument("-n", "--name_pattern", dest="name_pattern", help="the file name (no extention), Replacements: {m}=md5, {i}=post_id ", type=str, default=__default_name_pattern__, metavar="NAME")
     parser.add_argument("-t", "--no_tags", dest="add_tags", help="don't save tags or metadata", action='store_false')
+    parser.add_argument("-a", "--authorization", dest="authorization", help="your e621 username and API key", type=str, default=None, metavar="USERNAME:API_KEY")
     parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
     
     return parser.parse_args(args)
@@ -193,7 +210,7 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
     
-    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, user_agent=args.user_agent)
+    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, auth=args.authorization, user_agent=args.user_agent)
 
 def run():
     main(sys.argv[1:])
