@@ -9,7 +9,7 @@ import imgtag
 import libxmp
 
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
-__default_name_pattern__ = "dl621_{m}"
+__default_name_pattern__ = "dl621_{i}_{m}"
 __e621_base_url__ = "https://e621.net/"
 __e621_endpoint_posts__ = "posts"
 __e621_posts_per_request_limit__ = 320
