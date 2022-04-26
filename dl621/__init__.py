@@ -1,1 +1,1 @@
-from .core import download_image
+from .core import download_image, __e621_base_url__, __e621_endpoint_posts__, __default_user_agent__

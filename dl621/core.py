@@ -8,13 +8,14 @@ import imgtag
 
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
 __default_name_pattern__ = "dl621_{m}"
-__e621_base_url_post___ = "https://e621.net/posts/"
+__e621_base_url__ = "https://e621.net/"
+__e621_endpoint_posts__ = "posts/"
 
 def get_info_json(post_id, user_agent=__default_user_agent__):
     if type(post_id) != int:
         raise TypeError("'post_id' must be an integer.")
     
-    url = __e621_base_url_post___ + str(post_id) + ".json"
+    url = "{}{}{}.json".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
     
     headers = {"User-Agent": user_agent}
     
@@ -109,7 +110,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
         image_tags_obj = imgtag.ImgTag(image_path)
         
         # Set title
-        title = "{}{}".format(__e621_base_url_post___, post_id)
+        title = "{}{}{}".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
         image_tags_obj.set_title(title)
         
         # Set description
