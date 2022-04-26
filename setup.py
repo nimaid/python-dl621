@@ -20,7 +20,7 @@ setup(
     author_email='ellagjameson@gmail.com',
     url='https://github.com/nimaid/python-dl621',
     license=license,
-    install_requires=["imgtag>=0.1.1", "requests"],
+    install_requires=["imgtag>=1.0.1", "requests"],
     packages=find_packages(exclude=('tests', 'docs')),
     entry_points={
         'console_scripts': [
