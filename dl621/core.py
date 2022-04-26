@@ -114,7 +114,7 @@ def get_tags_from_json(info_json):
         tags_out.append("source: {}".format(source))
     
     return tags_out
-    
+
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
@@ -137,6 +137,10 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     if image_url == None:
         print_if_true("    ERROR: Image has no download URL.", messages)
         return None
+    
+    # Create destination folder if it doesn't already exist
+    #output_folder = os.path.realpath(output_folder)
+    os.makedirs(output_folder, exist_ok=True)
     
     # Download image
     print_if_true("    Downloading image...", messages)
