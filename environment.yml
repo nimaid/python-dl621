@@ -1,0 +1,10 @@
+name: dl621
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python>=3.7*
+  - pip
+  - exempi
+  - pip:
+    - dl621
