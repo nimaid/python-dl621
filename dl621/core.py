@@ -1,5 +1,6 @@
 import argparse
 import sys
+import warnings
 
 import requests
 import urllib.request
@@ -9,13 +10,14 @@ import imgtag
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
 __default_name_pattern__ = "dl621_{m}"
 __e621_base_url__ = "https://e621.net/"
-__e621_endpoint_posts__ = "posts/"
+__e621_endpoint_posts__ = "posts"
+__e621_posts_per_request_limit__ = 320
 
 def get_info_json(post_id, user_agent=__default_user_agent__):
     if type(post_id) != int:
         raise TypeError("'post_id' must be an integer.")
     
-    url = "{}{}{}.json".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
+    url = "{}{}/{}.json".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
     
     headers = {"User-Agent": user_agent}
     
@@ -25,6 +27,46 @@ def get_info_json(post_id, user_agent=__default_user_agent__):
         return None
     
     return r.json()["post"]
+
+def get_info_json_multiple(page=None, page_modifier=None, limit=None, tags=None, user_agent=__default_user_agent__):
+    # Build URL
+    url = "{}{}.json".format(__e621_base_url__, __e621_endpoint_posts__)
+    
+    if limit != None:
+        if type(limit) != int:
+            raise ValueError("The 'limit' parameter must be an interger between 0 and {}".format(__e621_posts_per_request_limit__))
+        if limit < 0 or limit > __e621_posts_per_request_limit__:
+            raise ValueError("The 'limit' parameter must be an interger between 0 and {}".format(__e621_posts_per_request_limit__))
+    else:
+        limit = __e621_posts_per_request_limit__
+    url += "?limit={}".format(limit)
+    
+    if type(page) == int:
+        if page_modifier != None:
+            if type(page_modifier) != str:
+                raise TypeError("The 'page_modifier' parameter must be a string")
+            if page_modifier not in ["a", "b"]:
+                raise ValueError("The 'page_modifier' parameter must be either 'a' (after) or 'b' (before)")
+            url += "&page={}()".format(page_modifier, page)
+        else:
+            url += "&page={}".format(page) 
+    elif page != None:
+        raise TypeError("The 'page' parameter must be an integer (use 'page_modifier' for [b]efore and [a]fter)")
+    
+    if tags != None:
+        if type(tags) != str:
+            raise ValueError("The 'tags' parameter must be a string")
+        url += "&tags={}".format(tags)
+    
+    # Get the data
+    headers = {"User-Agent": user_agent}
+    
+    r = requests.get(url, headers=headers)
+    
+    if r.status_code != 200:
+        return None
+   
+    return r.json()["posts"]
 
 def get_tags_from_json(info_json):
     post_id = info_json["id"]
@@ -110,7 +152,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
         image_tags_obj = imgtag.ImgTag(image_path)
         
         # Set title
-        title = "{}{}{}".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
+        title = "{}{}/{}".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
         image_tags_obj.set_title(title)
         
         # Set description
