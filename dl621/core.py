@@ -187,6 +187,8 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
             image_tags_obj.close()
         except libxmp.XMPError:
             warnings.warn("Could not save metadata in image!")
+        except SystemError:
+            warnings.warn("Could not save metadata in image!")
     
     print_if_true("    Done downloading! Location: {}".format(image_path), messages)
     return image_path
