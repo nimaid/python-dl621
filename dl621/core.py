@@ -6,7 +6,6 @@ import requests
 import urllib.request
 import os
 import imgtag
-import libxmp
 
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
 __default_name_pattern__ = "dl621_{i}_{m}"
@@ -185,8 +184,6 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
             image_tags = get_tags_from_json(image_info)
             image_tags_obj.add_tags(image_tags)
             image_tags_obj.close()
-        except libxmp.XMPError:
-            warnings.warn("Could not save metadata in image!")
         except SystemError:
             warnings.warn("Could not save metadata in image!")
     
