@@ -167,7 +167,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     
     # Add image metadata
     if add_tags:
-        print_if_true("    Embedding tags...", messages)
+        print_if_true("    Embedding metadata...", messages)
         try:
             image_tags_obj = imgtag.ImgTag(image_path)
             
@@ -186,6 +186,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
             image_tags_obj.close()
         except SystemError:
             warnings.warn("Could not save metadata in image!")
+            print_if_true("        [FAILED] Could not save metadata in image!", messages)
     
     print_if_true("    Done downloading! Location: {}".format(image_path), messages)
     return image_path
