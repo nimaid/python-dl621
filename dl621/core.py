@@ -133,24 +133,24 @@ def get_tags_from_json(info_json):
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, messages=True, custom_json=None, auth=None, user_agent=__default_user_agent__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, use_messages=False, use_warnings=True, custom_json=None, auth=None, user_agent=__default_user_agent__):
     # Get information from e621 API
     if custom_json != None:
         image_info = custom_json
     else:
-        print_if_true("    Getting info for e621 post...".format(post_id), messages)
+        print_if_true("    Getting info for e621 post...".format(post_id), use_messages)
         image_info = get_info_json(post_id, user_agent=user_agent, auth=auth)
     
     # Check to make sure it's valid
     if image_info == None:
-        print_if_true("    ERROR: No info returned.", messages)
+        print_if_true("    ERROR: No info returned.", use_messages)
         return None
     if image_info["flags"]["deleted"]:
-        print_if_true("    ERROR: Image has been deleted.", messages)
+        print_if_true("    ERROR: Image has been deleted.", use_messages)
         return None
     image_url = image_info["file"]["url"]
     if image_url == None:
-        print_if_true("    ERROR: Image has no download URL. You may need to use your API key or change your user settings.", messages)
+        print_if_true("    ERROR: Image has no download URL. You may need to use your API key or change your user settings.", use_messages)
         return None
     
     # Create destination folder if it doesn't already exist
@@ -158,7 +158,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     os.makedirs(output_folder, exist_ok=True)
     
     # Download image
-    print_if_true("    Downloading image...", messages)
+    print_if_true("    Downloading image...", use_messages)
     image_name = name_pattern.format(m = image_info["file"]["md5"], i = post_id) + "." + image_info["file"]["ext"]
     
     image_path = os.path.join(output_folder, image_name)
@@ -167,7 +167,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     
     # Add image metadata
     if add_tags:
-        print_if_true("    Embedding metadata...", messages)
+        print_if_true("    Embedding metadata...", use_messages)
         try:
             image_tags_obj = imgtag.ImgTag(image_path)
             
@@ -185,10 +185,11 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
             image_tags_obj.add_tags(image_tags)
             image_tags_obj.close()
         except SystemError:
-            warnings.warn("Could not save metadata in image!")
-            print_if_true("        [FAILED] Could not save metadata in image!", messages)
+            print_if_true("        [FAILED] Could not save metadata in image!", use_messages)
+            if use_warnings == True:
+                warnings.warn("Could not save metadata in image!")
     
-    print_if_true("    Done downloading! Location: {}".format(image_path), messages)
+    print_if_true("    Done downloading! Location: {}".format(image_path), use_messages)
     return image_path
 
 
@@ -214,7 +215,7 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
     
-    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, auth=args.authorization, user_agent=args.user_agent)
+    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, auth=args.authorization, user_agent=args.user_agent, use_messages=True, use_warnings=False)
 
 def run():
     main(sys.argv[1:])
