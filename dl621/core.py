@@ -1,7 +1,7 @@
 import argparse
 import sys
 import warnings
-
+import json
 import requests
 import urllib.request
 import os
@@ -133,7 +133,7 @@ def get_tags_from_json(info_json):
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, use_messages=False, use_warnings=True, custom_json=None, auth=None, user_agent=__default_user_agent__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, user_agent=__default_user_agent__):
     # Get information from e621 API
     if custom_json != None:
         image_info = custom_json
@@ -159,13 +159,14 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     
     # Download image
     print_if_true("    Downloading image...", use_messages)
-    image_name = name_pattern.format(m = image_info["file"]["md5"], i = post_id) + "." + image_info["file"]["ext"]
+    image_name_base = name_pattern.format(m = image_info["file"]["md5"], i = post_id)
+    image_name = image_name_base + os.path.extsep + image_info["file"]["ext"]
     
     image_path = os.path.join(output_folder, image_name)
     
     urllib.request.urlretrieve(image_url, image_path)
     
-    # Add image metadata
+    # Try to save metadata directly in the same file
     if add_tags:
         print_if_true("    Embedding metadata...", use_messages)
         try:
@@ -189,6 +190,13 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
             if use_warnings == True:
                 warnings.warn("Could not save metadata in image!")
     
+    # Save the metadata in a seperate file
+    if save_json:
+        json_name = image_name_base + os.path.extsep + "json"
+        print_if_true("    Saving metadata JSON...", use_messages)
+        with open(json_name, "w") as f:
+            json.dump(image_info, f, indent=4)
+    
     print_if_true("    Done downloading! Location: {}".format(image_path), use_messages)
     return image_path
 
@@ -207,6 +215,7 @@ def parse_args(args):
     parser.add_argument("-f", "--dl_folder", dest="dl_folder", help="the folder to download to", type=dir_path, default=".", metavar="FOLDER")
     parser.add_argument("-n", "--name_pattern", dest="name_pattern", help="the file name (no extention), Replacements: {m}=md5, {i}=post_id ", type=str, default=__default_name_pattern__, metavar="NAME")
     parser.add_argument("-t", "--no_tags", dest="add_tags", help="don't save tags or metadata", action='store_false')
+    parser.add_argument("-j", "--save_json", dest="save_json", help="saves metadata in a seperate .json file in additon to other options", action='store_true')
     parser.add_argument("-a", "--authorization", dest="authorization", help="your e621 username and API key", type=str, default=None, metavar="USERNAME:API_KEY")
     parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
     
@@ -215,7 +224,7 @@ def parse_args(args):
 def main(args):
     args = parse_args(args)
     
-    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, auth=args.authorization, user_agent=args.user_agent, use_messages=True, use_warnings=False)
+    download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, save_json=args.save_json, auth=args.authorization, user_agent=args.user_agent, use_messages=True, use_warnings=False)
 
 def run():
     main(sys.argv[1:])
