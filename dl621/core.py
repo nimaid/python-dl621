@@ -214,7 +214,7 @@ def parse_args(args):
     parser.add_argument("-i", "--post_id", dest="post_id", help="the ID of the e621 post", type=int, required=True, metavar="ID")
     parser.add_argument("-f", "--dl_folder", dest="dl_folder", help="the folder to download to", type=dir_path, default=".", metavar="FOLDER")
     parser.add_argument("-n", "--name_pattern", dest="name_pattern", help="the file name (no extention), Replacements: {m}=md5, {i}=post_id ", type=str, default=__default_name_pattern__, metavar="NAME")
-    parser.add_argument("-t", "--no_tags", dest="add_tags", help="don't save tags or metadata", action='store_false')
+    parser.add_argument("-t", "--no_tags", dest="add_tags", help="don't embedd tags or metadata", action='store_false')
     parser.add_argument("-j", "--save_json", dest="save_json", help="saves metadata in a seperate .json file in additon to other options", action='store_true')
     parser.add_argument("-a", "--authorization", dest="authorization", help="your e621 username and API key", type=str, default=None, metavar="USERNAME:API_KEY")
     parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
