@@ -192,8 +192,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     
     # Save the metadata in a seperate file
     if save_json:
-        json_name = image_name_base + os.path.extsep + "json"
-        json_path = os.path.join(output_folder, json_name)
+        json_path = image_path + os.path.extsep + "json"
         print_if_true("    Saving metadata JSON...", use_messages)
         with open(json_path, "w") as f:
             json.dump(image_info, f, indent=4)
