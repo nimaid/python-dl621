@@ -195,7 +195,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
         json_name = image_name_base + os.path.extsep + "json"
         json_path = os.path.join(output_folder, json_name)
         print_if_true("    Saving metadata JSON...", use_messages)
-        with open(json_name, "w") as f:
+        with open(json_path, "w") as f:
             json.dump(image_info, f, indent=4)
     
     print_if_true("    Done downloading! Location: {}".format(image_path), use_messages)
