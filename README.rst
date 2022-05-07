@@ -51,7 +51,19 @@ It can also be imported and used in your own scripts (default options shown)::
     import dl621
 
     r = dl621.download_image(post_id, output_folder=".", name_pattern="dl621_{i}_{m}", add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, user_agent="dl621/1.0 (by nimaid on e621)")
-    if r != None:
-        print("Image downloaded! Location:", r)
+    
+    if r["saved_image"]:
+        print("Image downloaded! Location:", r["path_image")
     else:
         print("Download failed!")
+
+The ``download_image()`` function returns a dictionary with the following items:
+
+* post_exists (bool)
+* post_deleted (bool)
+* post_missing_url (bool)
+* saved_image (bool)
+* saved_tags (bool)
+* saved_json (bool)
+* path_image (string)
+* path_json (string)
