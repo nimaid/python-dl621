@@ -205,7 +205,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     if add_tags:
         print_if_true("    Trying to embed metadata...", use_messages)
         try:
-            image_tags_obj = imgtag.ImgTag(image_path)
+            image_tags_obj = imgtag.ImgTag(image_path, use_warnings=use_warnings)
             
             # Set title
             title = "{}{}/{}".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
@@ -219,8 +219,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
             # Set tags
             image_tags = get_tags_from_json(image_info)
             image_tags_obj.add_tags(image_tags)
-            image_tags_obj.close()
-            results["saved_tags"] = True
+            results["saved_tags"] = image_tags_obj.close()
         except SystemError:
             print_if_true("        [FAILED] Could not save metadata in image!", use_messages)
             if use_warnings == True:
