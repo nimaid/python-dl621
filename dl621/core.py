@@ -3,12 +3,14 @@ import sys
 import warnings
 import json
 import requests
+import socket
 import urllib.request
 import os
 import imgtag
 
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
 __default_name_pattern__ = "dl621_{i}_{m}"
+__default_download_timeout__ = 5*60 # 5 minutes
 __e621_base_url__ = "https://e621.net/"
 __e621_endpoint_posts__ = "posts"
 __e621_posts_per_request_limit__ = 320
@@ -136,7 +138,7 @@ def get_tags_from_json(info_json):
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, user_agent=__default_user_agent__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, download_timeout=__default_download_timeout__, user_agent=__default_user_agent__):
     # Prepare results object
     results = {
         "post_exists": True,
@@ -197,9 +199,18 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     
     # Download image
     print_if_true("    Downloading image...", use_messages)
-    urllib.request.urlretrieve(image_url, image_path)
-    results["saved_image"] = True
-    results["path_image"] = image_path
+    original_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(download_timeout)
+    while not results["saved_image"]:
+        try:
+            urllib.request.urlretrieve(image_url, image_path)
+            results["saved_image"] = True
+            results["path_image"] = image_path
+        except socket.timeout:
+            print_if_true("        Download timed out, retrying...", use_messages)
+        except urllib.error.URLError:
+            print_if_true("        Download timed out, retrying...", use_messages)
+    socket.setdefaulttimeout(original_timeout)
     
     # Try to save metadata directly in the same file
     if add_tags:
