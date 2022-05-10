@@ -50,7 +50,7 @@ It can also be imported and used in your own scripts (default options shown)::
 
     import dl621
 
-    r = dl621.download_image(post_id, output_folder=".", name_pattern="dl621_{i}_{m}", add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, download_timeout=5*60, user_agent="dl621/1.0 (by nimaid on e621)")
+    r = dl621.download_image(post_id, output_folder=".", name_pattern="dl621_{i}_{m}", add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, download_timeout=5, user_agent="dl621/1.0 (by nimaid on e621)")
     
     if r["saved_image"]:
         print("Image downloaded! Location:", r["path_image")
