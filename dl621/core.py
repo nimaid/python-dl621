@@ -135,6 +135,11 @@ def get_tags_from_json(info_json):
     
     return tags_out
 
+def download_file(url, filename, user_agent=__default_user_agent__):
+    opener = urllib.request.URLopener()
+    opener.addheader('User-Agent', user_agent)
+    filename, headers = opener.retrieve(url, filename)
+
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
@@ -203,7 +208,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     socket.setdefaulttimeout(download_timeout)
     while not results["saved_image"]:
         try:
-            urllib.request.urlretrieve(image_url, image_path)
+            download_file(image_url, image_path, user_agent=user_agent)
             results["saved_image"] = True
             results["path_image"] = image_path
         except socket.timeout:
