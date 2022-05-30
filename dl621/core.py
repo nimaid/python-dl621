@@ -11,6 +11,7 @@ import imgtag
 __default_user_agent__ = "dl621/1.0 (by nimaid on e621)"
 __default_name_pattern__ = "dl621_{i}_{m}"
 __default_download_timeout__ = 5 # 5 seconds
+__default_memory_limit_ratio__= imgtag.__DEFAULT_MEMORY_LIMIT_RATIO__
 __e621_base_url__ = "https://e621.net/"
 __e621_endpoint_posts__ = "posts"
 __e621_posts_per_request_limit__ = 320
@@ -143,7 +144,7 @@ def download_file(url, filename, user_agent=__default_user_agent__):
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, download_timeout=__default_download_timeout__, user_agent=__default_user_agent__, memory_limit_ratio=imgtag.__DEFAULT_MEMORY_LIMIT_RATIO__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, download_timeout=__default_download_timeout__, user_agent=__default_user_agent__, memory_limit_ratio=__default_memory_limit_ratio__):
     # Prepare results object
     results = {
         "post_exists": True,
@@ -262,7 +263,7 @@ def parse_args(args):
     parser.add_argument("-j", "--save_json", dest="save_json", help="saves metadata in a seperate .json file in additon to other options", action='store_true')
     parser.add_argument("-a", "--authorization", dest="authorization", help="your e621 username and API key", type=str, default=None, metavar="USERNAME:API_KEY")
     parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
-    parser.add_argument("-m", "--memory_limit_ratio", dest="memory_limit_ratio", help="max percentage of available memory to use", type=float, default=imgtag.__DEFAULT_MEMORY_LIMIT_RATIO__, metavar="MEM_LIMIT")
+    parser.add_argument("-m", "--memory_limit_ratio", dest="memory_limit_ratio", help="max percentage of available memory to use", type=float, default=__default_memory_limit_ratio__, metavar="MEM_LIMIT")
     
     return parser.parse_args(args)
 

@@ -13,14 +13,14 @@ with open('LICENSE') as f:
     
 setup(
     name='dl621',
-    version='2.1.2',
+    version='2.1.4',
     description='A simple python module and CLI utility to download e621 images with embedded XMP tags and description',
     long_description=readme,
     author='Ella Jameson',
     author_email='ellagjameson@gmail.com',
     url='https://github.com/nimaid/python-dl621',
     license=license,
-    install_requires=["imgtag>=1.1.2", "requests", "sockets"],
+    install_requires=["imgtag>=1.1.4", "requests", "sockets"],
     packages=find_packages(exclude=('tests', 'docs')),
     entry_points={
         'console_scripts': [

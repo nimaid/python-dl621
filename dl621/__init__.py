@@ -1,6 +1,7 @@
 from .core import (__default_user_agent__,
                    __default_name_pattern__,
                    __default_download_timeout__,
+                   __default_memory_limit_ratio__,
                    __e621_base_url__,
                    __e621_endpoint_posts__,
                    __e621_posts_per_request_limit__,
