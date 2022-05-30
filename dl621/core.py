@@ -143,7 +143,7 @@ def download_file(url, filename, user_agent=__default_user_agent__):
 def print_if_true(in_string, do_print):
     if do_print:
         print(in_string)
-def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, download_timeout=__default_download_timeout__, user_agent=__default_user_agent__):
+def download_image(post_id, output_folder=".", name_pattern=__default_name_pattern__, add_tags=True, save_json=False, use_messages=False, use_warnings=True, custom_json=None, auth=None, download_timeout=__default_download_timeout__, user_agent=__default_user_agent__, memory_limit_ratio=imgtag.__DEFAULT_MEMORY_LIMIT_RATIO__):
     # Prepare results object
     results = {
         "post_exists": True,
@@ -221,7 +221,7 @@ def download_image(post_id, output_folder=".", name_pattern=__default_name_patte
     if add_tags:
         print_if_true("    Trying to embed metadata...", use_messages)
         try:
-            image_tags_obj = imgtag.ImgTag(image_path, use_warnings=use_warnings)
+            image_tags_obj = imgtag.ImgTag(image_path, use_warnings=use_warnings, memory_limit_ratio=memory_limit_ratio)
             
             # Set title
             title = "{}{}/{}".format(__e621_base_url__, __e621_endpoint_posts__, post_id)
@@ -262,13 +262,14 @@ def parse_args(args):
     parser.add_argument("-j", "--save_json", dest="save_json", help="saves metadata in a seperate .json file in additon to other options", action='store_true')
     parser.add_argument("-a", "--authorization", dest="authorization", help="your e621 username and API key", type=str, default=None, metavar="USERNAME:API_KEY")
     parser.add_argument("-u", "--user_agent", dest="user_agent", help="manual override of the user agent string", type=str, default=__default_user_agent__, metavar="USERAGENT")
+    parser.add_argument("-m", "--memory_limit_ratio", dest="memory_limit_ratio", help="max percentage of available memory to use", type=float, default=imgtag.__DEFAULT_MEMORY_LIMIT_RATIO__, metavar="MEM_LIMIT")
     
     return parser.parse_args(args)
 
 def main(args):
     args = parse_args(args)
     
-    r = download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, save_json=args.save_json, auth=args.authorization, user_agent=args.user_agent, use_messages=True, use_warnings=False)
+    r = download_image(post_id=args.post_id, output_folder=args.dl_folder, name_pattern=args.name_pattern, add_tags=args.add_tags, save_json=args.save_json, auth=args.authorization, user_agent=args.user_agent, use_messages=True, use_warnings=False, memory_limit_ratio=args.memory_limit_ratio)
 
 def run():
     main(sys.argv[1:])
