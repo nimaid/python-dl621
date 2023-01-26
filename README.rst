@@ -9,7 +9,7 @@ Installation
 
 The module requires Exempi, which is only available for Linux and Mac. Hence, this module only works on Linux and Mac.
 
-On Windows, you can use Windows Subsystem for Linux (WSL) to run code using this module.
+On Windows, you can use Windows Subsystem for Linux (WSL) to install and run this module.
 
 To easily install everything via conda:
 
