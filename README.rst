@@ -7,7 +7,9 @@ A simple python module and CLI utility to download e621 images with embedded XMP
 Installation
 ========================
 
-The module requires Exempi, which is only available for Linux and Mac. Hence, this module only works on Linux and Mac. On Windows, you can use Windows Subsystem for Linux (WSL) to run code using this module.
+The module requires Exempi, which is only available for Linux and Mac. Hence, this module only works on Linux and Mac.
+
+On Windows, you can use Windows Subsystem for Linux (WSL) to run code using this module.
 
 To easily install everything via conda:
 
